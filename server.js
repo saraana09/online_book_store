@@ -17,6 +17,8 @@ server.get('/', (req, res) => {
     });
 });
 
+const userRouter = require('./routes/user')
+server.use('/user',userRouter)
 
 
 server.listen(PORT, () => {
