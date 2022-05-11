@@ -23,6 +23,9 @@ server.use('/user',userRouter)
 const bookRouter = require('./routes/book')
 server.use('/book',bookRouter)
 
+const authorRouter = require('./routes/author')
+server.use('/author', authorRouter)
+
 
 server.listen(PORT, () => {
     mongoConfig()

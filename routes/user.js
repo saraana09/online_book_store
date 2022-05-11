@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
         } else {
             console.log('created user successfully');
             res.status(201).json({
-                message: 'Created Successfully',
+                message: 'User Created Successfully',
                 user: createdUser
             })
         }

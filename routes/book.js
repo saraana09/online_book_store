@@ -13,26 +13,62 @@ router.post('/', (req, res) => {
         } else {
             console.log('created book successfully');
             res.status(201).json({
-                message: 'Created Successfully',
-                user: createdBook
+                message: ' Book Created Successfully',
+                book: createdBook
             })
         }
     })
 })
-// router.get('/', (req, res) => {
 
-// })
+// list all books  
+router.get('/', (req, res) =>{
+    Book.find((error, Book) => {
+        if(error){
+            console.log(error)
+            res.status(400).json({error: "an error has occurred"})
+        } else {
+            console.log("all books listed")
+            res.status(200).json({books: Book})
+        }
+    })
+})
 
-// router.get('/:id', (req, res) => {
 
-// })
+// Update a book by id
+router.put('/:id', (req, res) => {
+   const id = req.params.id
+   const updatedBook = req.body
+   Book.updateOne({_id:id}, updatedBook, {new: true}, (error, updatedBook) => {
+       if(error){
+           res.status(404).json({message: error.message})
+       } else {
+           res.status(202).json(updatedBook)
+       }
+   })
+})
 
+// shows a book by id
+router.get('/:id', (req, res) => {
+   const id = req.params.id
+   Book.findById(id, (error, Book) =>{
+       if(error){
+           res.status(404).json({message: error.message})
+       } else {
+           res.status(202).json(Book)
+       }
+   })
+})
 
-// router.delete('/:id', (req, res) => {
-
-// })
-
-// router.put('/:id', (req, res) => {
-
-// })
+// delete a book by id
+router.delete('/:id', (req, res) => {
+   Book.deleteOne({ id: req.params.id}, (error, result) =>{
+       if(error){
+           console.error(error)
+           res.status(404).json({error: "book not found"})
+       } else {
+           console.log("deleted book successfully")
+           res.status(204).json({})
+       }
+   })
+})
 module.exports = router;

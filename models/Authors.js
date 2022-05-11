@@ -7,6 +7,6 @@ const authorSchema = new Schema({
   books: {type: Schema.Types.ObjectId, ref: 'Books'}
 })
 
-const User = mongoose.model('Authors', userSchema);
+const Authors = mongoose.model('Authors', authorSchema);
 
 module.exports = Authors;
