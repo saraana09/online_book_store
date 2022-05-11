@@ -20,6 +20,9 @@ server.get('/', (req, res) => {
 const userRouter = require('./routes/user')
 server.use('/user',userRouter)
 
+const bookRouter = require('./routes/book')
+server.use('/book',bookRouter)
+
 
 server.listen(PORT, () => {
     mongoConfig()
