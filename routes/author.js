@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Author = require('../models/Authors')
+const Book = require('../models/Books')
 
 
 
@@ -73,6 +74,40 @@ router.delete('/:id', (req, res) => {
     })
 })
 
-
+router.put('/book/:authorId/:bookId', (req, res) => {
+    Author.updateOne ({ 
+      _id: req.params.authorId 
+    }, {
+      $push: {
+        Book: req.params.bookId 
+      }
+    }, (error, updatedAuhtor) => {
+      if (error) {
+        console.error(error);
+        res.status(404).json({ 
+          error: 'Author not found'
+        });
+      } else {
+        Book.updateOne({ 
+          _id: req.params.bookId 
+        }, {
+          $push: {
+            books_author: req.params.bookId 
+          }
+        }, (error, updatedBook) => {
+          if (error) {
+            console.error(error); 
+            res.status(404).json({
+              error: 'Book not found'
+            })
+          } else {
+            res.status(202).json({
+              message: 'Successfully added in authors book'
+            }) 
+          }
+        })
+      }
+    })
+  })
 
 module.exports = router;

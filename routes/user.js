@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/Users')
+const Book = require('../models/Books')
 
 // Create a new user
 router.post('/', (req, res) => {
@@ -19,6 +20,8 @@ router.post('/', (req, res) => {
         }
     })
 })
+
+
 
 // list all users  
 router.get('/', (req, res) =>{
@@ -72,5 +75,44 @@ router.delete('/:id', (req, res) => {
         }
     })
 })
+
+router.put('/cart/:userId/:bookId', (req, res) => {
+    User.updateOne ({ 
+      _id: req.params.userId 
+    }, {
+      $push: {
+        cart: req.params.bookId 
+      }
+    }, (error, updatedUser) => {
+      if (error) {
+        console.error(error);
+        res.status(404).json({ 
+          error: 'User not found'
+        });
+      } else {
+        Book.updateOne({ 
+          _id: req.params.bookId 
+        }, {
+          $push: {
+            cart_user: req.params.userId 
+          }
+        }, (error, updatedBook) => {
+          if (error) {
+            console.error(error); 
+            res.status(404).json({
+              error: 'Book not found'
+            })
+          } else {
+            res.status(202).json({
+              message: 'Successfully added in cart'
+            }) 
+          }
+        })
+      }
+    })
+  })
+
+
+
 
 module.exports = router;
